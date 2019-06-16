@@ -12,21 +12,24 @@ import javax.persistence.*;
 @Entity(name = "blog")
 public class Blog {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 32)
     private Integer id;
     private String title;
-    private String content;
-    @Column(length = 50)
+    @Column(length = 120)
+    private String author;
+    @Column(length = 120)
     private String publishTime;
-    @Column(length = 50)
+    @Column(length = 180)
     private String sourceUrl;
+    private String readNum;
 
-    public Blog(String title, String content, String publishTime, String sourceUrl) {
+    public Blog(String title, String author, String publishTime, String sourceUrl, String readNum) {
         this.title = title;
-        this.content = content;
+        this.author = author;
         this.publishTime = publishTime;
         this.sourceUrl = sourceUrl;
+        this.readNum = readNum;
     }
 
     public Blog() {

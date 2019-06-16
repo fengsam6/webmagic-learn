@@ -1,13 +1,9 @@
 package com.feng.webmagic.PageProcess;
 
 import com.feng.entity.Blog;
-import com.feng.webmagic.pipeline.BlogPipeline;
 import lombok.extern.slf4j.Slf4j;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.downloader.HttpClientDownloader;
-import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 
@@ -31,9 +27,10 @@ public class BlogPageProcessor implements PageProcessor {
            Html html = page.getHtml();
             String title = html.xpath("//h1[@class='title-article']/text()").toString();
             String publishTime = html.xpath("//div[@class='article-bar-top']/span[@class='time']/text()").get();
-            String content = html.xpath("//div[@id='article_content']").toString();
+            String author = html.xpath("//a[@class='follow-nickName']/text()").toString();
            String sourceUrl = page.getUrl().toString();
-            Blog blog = new Blog(title, content, publishTime,sourceUrl);
+           String readNum = html.xpath("//span[@class='read-count']/text()").toString();
+            Blog blog = new Blog(title, author, publishTime,sourceUrl,readNum);
             page.putField("blog", blog);
         }
 

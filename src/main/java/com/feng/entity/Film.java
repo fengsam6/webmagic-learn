@@ -2,10 +2,7 @@ package com.feng.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by rf on 2019/4/3.
@@ -14,14 +11,14 @@ import javax.persistence.Id;
 @Entity(name = "tb_film")
 public class Film {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 32)
     private Integer id;
-    @Column(length = 70)
+    @Column(length = 120)
     private String title;
-    @Column(length = 70)
+    @Column(length = 170)
     private String url;
-    @Column(length = 70)
+    @Column(length = 180)
     private String imgUrl;
     private String score;
 

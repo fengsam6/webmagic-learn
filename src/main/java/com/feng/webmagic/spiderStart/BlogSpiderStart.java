@@ -1,14 +1,17 @@
 package com.feng.webmagic.spiderStart;
 
 import com.feng.webmagic.PageProcess.BlogPageProcessor;
-import com.feng.webmagic.pipeline.BlogPipeline;
+import com.feng.webmagic.pipeline.BlogDBPipeline;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
-import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
+
+import javax.annotation.Resource;
 
 /**
  * 使用webmagic框架爬CSDN博客
@@ -16,21 +19,26 @@ import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 @Component
 @Slf4j
 public class BlogSpiderStart {
-@Scheduled(fixedRate = 1000)
-    public void start(){
-    log.info("启动爬虫。。。。。");
-        Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/zhaipengfei1231/article/details/79984047")
-                .addPipeline(new BlogPipeline())
-                .addPipeline(new JsonFilePipeline("blog"))
-                .addPipeline(new ConsolePipeline())
-//                .setDownloader(new HttpClientDownloader())
-                .thread(5).run();
+    @Autowired
+    private BlogDBPipeline blogPipeline;
+
+    //    @Scheduled(cron= "0-30 * 9  * * ?")
+//    @Scheduled(fixedDelay = 100)
+//    @Async
+    public void startScheduled() {
+        start();
     }
-    public static void main(String[] args) {
+
+    public void start() {
+        log.info("启动爬虫。。。。。");
         Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/zhaipengfei1231/article/details/79984047")
-//                .addPipeline(new ConsolePipeline())
-                .addPipeline(new BlogPipeline())
-                .addPipeline(new JsonFilePipeline("blog"))
-                .setDownloader(new HttpClientDownloader()).thread(5).run();
+                .addPipeline(blogPipeline)
+                .setDownloader(new HttpClientDownloader())
+                .thread(5).run();
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
