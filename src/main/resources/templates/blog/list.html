@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>博客列表</title>
+    <style>
+        .main{
+            margin-top:10px;
+        }
+        .center{
+            text-align: center;
+        }
+        .author{
+            margin-left: 60px;
+        }
+        .date{
+            margin-left: 80px;
+        }
+        .title{
+            padding-left: 10px;
+            display: inline-block;
+            width: 240px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space:nowrap;
+        }
+    </style>
+</head>
+<body>
+<div class="container main">
+    <div class="alert alert-primary center" role="alert" >使用webmagic爬取CSDN博客</div>
+    <ul class="list-group" >
+        <li class="list-group-item" th:each="blog:${blogList}">
+            <a th:text="${blog.title}" th:href="${blog.sourceUrl}" class="title" target="_blank">${blog.title}</a>
+            <span class="author" th:text="'博客作者：'+${blog.author}"></span>
+            <span class="date" th:text="'发表时间：'+${blog.publishTime}"></span>
+            <span class="date" th:text="${blog.readNum}"></span>
+        </li>
+    </ul>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

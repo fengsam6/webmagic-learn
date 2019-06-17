@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>电影列表</title>
+    <style>
+        .main {
+            margin-top: 10px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .score {
+            margin-left: 200px;
+        }
+
+        .play {
+            margin-left: 200px;
+        }
+        .title-label{
+            padding-right: 10px;
+        }
+        .title {
+            padding-left: 20px;
+            display: inline-block;
+            width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .search-form {
+            position: absolute;
+            right: 250px;
+            top: 66px;
+        }
+        .blog-list{
+            margin-top: 50px;
+        }
+        .search-btn{
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container main">
+    <div class="alert alert-primary center" role="alert">使用webmagic爬取爱奇艺电影</div>
+    <!--<form class="form-inline search-form " action="">-->
+        <!--<div class="form-group">-->
+            <!--<label for="exampleInputName2" class="title-label">电影名称</label>-->
+            <!--<input type="text" class="form-control" id="exampleInputName2" placeholder="输入电影名称：">-->
+        <!--</div>-->
+        <!---->
+        <!--<button type="submit" class="btn btn-primary search-btn">查找</button>-->
+    <!--</form>-->
+    <ul class="list-group blog-list" >
+        <li class="list-group-item" th:each="film:${filmList}">
+            <a th:text="${film.title}" th:href="${film.url}" class="title" target="_blank">${film.title}</a>
+            <span class="score" th:text="'电影评分：'+${film.score}"></span>
+            <a class="play" th:href="'https://jx.618g.com/?url='+${film.url}" target="_blank">解析播放</a>
+        </li>
+    </ul>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

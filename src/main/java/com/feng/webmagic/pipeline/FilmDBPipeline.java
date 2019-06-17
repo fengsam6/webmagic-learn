@@ -23,7 +23,11 @@ public class FilmDBPipeline implements Pipeline {
     @Override
     public void process(ResultItems resultItems, Task task) {
         List<Film> films = resultItems.get("filmList");
-        for(Film film : films){
+        if (films == null) {
+            log.error("爬虫失败，爬虫url或者页面解析有问题");
+            return;
+        }
+        for (Film film : films) {
             log.info("**********************film:{}****************", film.toString());
             filmService.add(film);
         }

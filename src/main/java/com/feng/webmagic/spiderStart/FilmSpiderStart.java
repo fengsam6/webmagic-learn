@@ -20,13 +20,15 @@ import javax.annotation.Resource;
 public class FilmSpiderStart {
     @Autowired
     private FilmDBPipeline filmPipeline;
-    @Scheduled(cron = "0/40 * * * * ?")
-    public void startScheduled(){
+
+    //    @Scheduled(cron = "0/40 * * * * ?")
+    public void startScheduled() {
         start();
     }
-    public void start(){
+
+    public void start() {
         log.info("启动爬虫。。。。。");
-        String reqUrl = "https://list.iqiyi.com/www/1/27401----------2---11-1-1-iqiyi--.html";
+        String reqUrl = "https://list.iqiyi.com/www/1/-------------8-6-1-iqiyi--.html";
         Spider.create(new FilmPageProcessor()).addUrl(reqUrl)
                 .addPipeline(filmPipeline)
                 .setDownloader(new HttpClientDownloader()).thread(5).run();

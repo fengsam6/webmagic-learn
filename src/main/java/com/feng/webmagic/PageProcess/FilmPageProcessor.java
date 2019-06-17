@@ -20,9 +20,8 @@ public class FilmPageProcessor implements PageProcessor {
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100)
             .setUserAgent(
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
-    private static final String detailUrl = "https://list.iqiyi.com/www/1/1----------2---11-1-1-iqiyi--.html";
-    private static final String helpUrl = "https://list\\.iqiyi\\.com/www/1/\\d+----------\\d+---11-1-1-iqiyi--.html";
-
+    private static final String detailUrl = "https://list.iqiyi.com/www/1/-------------8-1-1-iqiyi--.html";
+    private static final String helpUrl = "https://list\\.iqiyi\\.com/www/\\d+/\\d*-------------\\d+-\\d+-\\d+-iqiyi--.html";
     @Override
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex(helpUrl).all());
@@ -46,7 +45,7 @@ public class FilmPageProcessor implements PageProcessor {
 
     private Film resolve(Selectable li) {
         System.out.println(li.toString());
-        String url = li.xpath("//a[@class='qy-mod-link']/@href").toString();
+        String url = "https:"+li.xpath("//a[@class='qy-mod-link']/@href").toString();
         String title = li.xpath("//a[@class='qy-mod-link']/@title").toString();
         String imgUrl = li.xpath("//div[@class='icon-tr']/img/@src").toString();
         String score = li.xpath("//span[@class='text-score']/text()").toString();
@@ -54,7 +53,7 @@ public class FilmPageProcessor implements PageProcessor {
         log.info("film:{}****************", film.toString());
         return film;
     }
-
+    //www.iqiyi.com/v_19rqxb34a0.html
     @Override
     public Site getSite() {
         return site;

@@ -31,7 +31,7 @@ public class BlogSpiderStart {
 
     public void start() {
         log.info("启动爬虫。。。。。");
-        Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/zhaipengfei1231/article/details/79984047")
+        Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/wireless_com/article/details/89008061")
                 .addPipeline(blogPipeline)
                 .setDownloader(new HttpClientDownloader())
                 .thread(5).run();
