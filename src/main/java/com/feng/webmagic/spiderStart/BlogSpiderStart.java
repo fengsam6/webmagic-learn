@@ -22,9 +22,9 @@ public class BlogSpiderStart {
     @Autowired
     private BlogDBPipeline blogPipeline;
 
-    //    @Scheduled(cron= "0-30 * 9  * * ?")
-//    @Scheduled(fixedDelay = 100)
-//    @Async
+    @Scheduled(cron = "0/30 * *  * * ?")
+    @Scheduled(fixedDelay = 100)
+    @Async
     public void startScheduled() {
         start();
     }

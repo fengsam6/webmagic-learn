@@ -50,14 +50,14 @@
 <body>
 <div class="container main">
     <div class="alert alert-primary center" role="alert">使用webmagic爬取爱奇艺电影</div>
-    <!--<form class="form-inline search-form " action="">-->
-        <!--<div class="form-group">-->
-            <!--<label for="exampleInputName2" class="title-label">电影名称</label>-->
-            <!--<input type="text" class="form-control" id="exampleInputName2" placeholder="输入电影名称：">-->
-        <!--</div>-->
-        <!---->
-        <!--<button type="submit" class="btn btn-primary search-btn">查找</button>-->
-    <!--</form>-->
+    <form class="form-inline search-form " action="">
+        <div class="form-group">
+            <label for="exampleInputName2" class="title-label">电影名称</label>
+            <input type="text" class="form-control" id="exampleInputName2" placeholder="输入电影名称：">
+        </div>
+
+        <button type="submit" class="btn btn-primary search-btn">查找</button>
+    </form>
     <ul class="list-group blog-list" >
         <li class="list-group-item" th:each="film:${filmList}">
             <a th:text="${film.title}" th:href="${film.url}" class="title" target="_blank">${film.title}</a>

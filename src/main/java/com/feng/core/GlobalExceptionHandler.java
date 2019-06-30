@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public String exceptionHandler(){
+    public String exceptionHandler(Exception e){
+        e.printStackTrace();
+        log.error("{}",e.getMessage());
+        //toDo
         return "";
     }
 }

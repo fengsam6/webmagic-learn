@@ -12,7 +12,7 @@ springBoot、mysql、springBoot Data JPA、webmagic
 
    > ​         使用webmagic从爱奇艺官网上爬取电影标题、url等数据，并且将爬虫数据存放MySQL数据库中。电影列表页面渲染如下，点击解析播放可以播放该视频。
 
-![](运行效果/films.png)
+<img src="运行效果/films.png" width="680" >
 
 
 
@@ -20,9 +20,11 @@ springBoot、mysql、springBoot Data JPA、webmagic
 
 2. 电影列表数据库数据
 
-   > 使用webmagic从CSDN网站爬虫爬取数据，并且将数据存放mysql数据中。
+   > 使用webmagic从爱奇艺官网爬取数据，并且将数据存放mysql数据中。
 
-   ![](运行效果/films-DB-data.png)
+   
+
+   <img src="运行效果/films-DB-data.png" width="680" >
 
    
 
@@ -48,4 +50,4 @@ springBoot、mysql、springBoot Data JPA、webmagic
 
    5. 从CSDN爬取博客数据，效果如下图。
 
-      ![](F:\test\webmagic-learn\运行效果\blos-spider.png)
+      ![](运行效果/blos-spider.png)

@@ -2,9 +2,8 @@ package com.feng.controller;
 
 import com.feng.entity.Blog;
 import com.feng.servcie.BlogService;
-import org.assertj.core.internal.bytebuddy.implementation.bytecode.constant.DefaultValue;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +23,8 @@ public class BlogController {
 
     @GetMapping("/list.htm")
     public String blogList(Blog search, Model model, @RequestParam(defaultValue = "1") int num,@RequestParam(defaultValue = "8") int size) {
-        Page<Blog> blogList = blogService.ListPage(search,num,size);
-        model.addAttribute("blogList",blogList);
-
+        PageInfo<Blog> blogPage = blogService.ListPage(search,num,size);
+        model.addAttribute("blogPage",blogPage);
         return "blog/list";
     }
 

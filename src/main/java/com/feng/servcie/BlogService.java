@@ -1,7 +1,7 @@
 package com.feng.servcie;
 
 import com.feng.entity.Blog;
-import org.springframework.data.domain.Page;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Service
 public interface BlogService {
-    Page<Blog> ListPage(Blog blog, int page, int szie);
+    PageInfo<Blog> ListPage(Blog blog, int page, int szie);
 
     Blog add(Blog blog);
 }

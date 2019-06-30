@@ -32,8 +32,8 @@
 <body>
 <div class="container main">
     <div class="alert alert-primary center" role="alert" >使用webmagic爬取CSDN博客</div>
-    <ul class="list-group" >
-        <li class="list-group-item" th:each="blog:${blogList}">
+    <ul class="list-group">
+        <li class="list-group-item" th:each="blog:${blogPage.list}">
             <a th:text="${blog.title}" th:href="${blog.sourceUrl}" class="title" target="_blank">${blog.title}</a>
             <span class="author" th:text="'博客作者：'+${blog.author}"></span>
             <span class="date" th:text="'发表时间：'+${blog.publishTime}"></span>
@@ -43,13 +43,17 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#" onclick="go(1,8)">首页</a></li>
             <li class="page-item"><a class="page-link" href="#">2</a></li>
             <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item"><a class="page-link" href="#">Next</a></li>
         </ul>
     </nav>
 </div>
-
+<script>
+    function go(pageNum,pageSzie) {
+        window.location.href="/blogs/list.htm?num="+pageNum+"&size="+pageSzie
+    }
+</script>
 </body>
 </html>
