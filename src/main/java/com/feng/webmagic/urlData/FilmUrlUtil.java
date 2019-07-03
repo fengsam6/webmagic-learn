@@ -114,6 +114,7 @@ public class FilmUrlUtil {
         urls.addAll(getHotFilmUrlList());
         urls.addAll(getHighScoreUrlList());
         urls.addAll(getRecentPublishUrlList());
+        urls.addAll(getHighValueUrlList());
         return urls.toArray(new String[urls.size()]);
     }
 }

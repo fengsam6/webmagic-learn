@@ -24,7 +24,7 @@ public class FilmDBPipeline implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
         List<Film> films = resultItems.get("filmList");
         if (films == null) {
-            log.error("爬虫失败，爬虫url或者页面解析有问题");
+            log.error("爬虫失败，爬虫url或者页面解析有问题或者该URL已经爬取过（检查redis set中是否有该url）");
             return;
         }
         for (Film film : films) {

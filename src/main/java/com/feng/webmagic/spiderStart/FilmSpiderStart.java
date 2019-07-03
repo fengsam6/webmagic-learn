@@ -11,6 +11,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,11 +26,13 @@ import java.util.List;
 public class FilmSpiderStart {
     @Autowired
     private FilmDBPipeline filmPipeline;
+    @Autowired
+    private RedisScheduler redisScheduler;
 
     /**
      * 可以开启定时爬虫
      */
-        @Scheduled(cron = "0/40 * * * * ?")
+        @Scheduled(cron = "* 0-30 9 * * ?")
     public void startScheduled() {
         start();
     }
@@ -42,8 +45,9 @@ public class FilmSpiderStart {
         String[] highValueUrl = FilmUrlUtil.getHighValueUrls();//获取综合排序url
         String[] allUrl = FilmUrlUtil.getAllUrl();
         Spider.create(new FilmPageProcessor())
-                .addUrl(highValueUrl) //设置爬虫url
+                .addUrl(allUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
+                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader()).thread(5).run();
     }
 

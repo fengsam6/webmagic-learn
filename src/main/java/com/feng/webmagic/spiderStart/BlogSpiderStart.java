@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import javax.annotation.Resource;
 
@@ -21,9 +22,10 @@ import javax.annotation.Resource;
 public class BlogSpiderStart {
     @Autowired
     private BlogDBPipeline blogPipeline;
+    @Autowired
+    private RedisScheduler redisScheduler;
 
-    @Scheduled(cron = "0/30 * *  * * ?")
-    @Scheduled(fixedDelay = 100)
+    @Scheduled(cron = "* 0-30 9  * * ?")
     @Async
     public void startScheduled() {
         start();
@@ -33,6 +35,7 @@ public class BlogSpiderStart {
         log.info("启动爬虫。。。。。");
         Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/wireless_com/article/details/89008061")
                 .addPipeline(blogPipeline)
+                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())
                 .thread(5).run();
         try {

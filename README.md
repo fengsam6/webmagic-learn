@@ -1,8 +1,8 @@
 ## webmagic-learn
 ### 介绍
-1. 使用webmagic爬取CSDN博客，爬取爱奇艺视频
+1. 使用webmagic爬取CSDN博客，爬取爱奇艺视频，使用redis缓存爬虫爬过的url
 ### 后端技术
-springBoot、mysql、springBoot Data JPA、webmagic
+springBoot、mysql、springBoot Data JPA、webmagic、redis
 
 ### 运行效果
 
@@ -34,7 +34,7 @@ springBoot、mysql、springBoot Data JPA、webmagic
 
       > ​       使用webmagic从CSDN网站爬取数据，并且将数据存放mysql数据中。博客列表页面渲染如下，点击博客标题可以查看博客内容。
 
-   ![](F:\test\webmagic-learn\运行效果\blogs.png)
+   ![](运行效果/blogs.png)
 
    
 
