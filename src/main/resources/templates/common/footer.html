@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>footer</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body >
+<div th:fragment="common">
+    <div class="layui-container layui-nav layui-footer">
+        <div style=" margin-top: 30px;
+        color: #fff;
+        padding:10px 20px;">
+            <p>Copyright ©RF All Rights Reserved　test</p>
+            <p>该项目仅用于爬虫练习，不可以商用，如果有侵权，请立刻停用</p>
+        </div>
+    </div>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+
+        //…
+    });
+</script>
+</body>
+</html>

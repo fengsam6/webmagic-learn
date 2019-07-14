@@ -2,29 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="referrer" content="no-referrer"/><!--页面头部添加-->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>电影列表</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <title>使用webmagic爬取爱奇艺电影</title>
+
     <style>
-        .main {
-            margin-top: 10px;
+        ul, li {
+            list-style: none;
         }
 
-        .center {
-            text-align: center;
+        .pic-item {
+            cursor: pointer;
+            display: block;
+            width: 180px;
+            height: 236px;
+            margin: 2px;
+            border: 2px solid #01AAED;
         }
 
-        .score {
-            margin-left: 200px;
+        .picWrap {
+            display: inline-block;
+            width: 180px;
+            height: 236px;
+            margin: 20px 4px;
         }
 
-        .play {
-            margin-left: 200px;
+        .fl {
+            float: left;
         }
-        .title-label{
-            padding-right: 10px;
-        }
+
         .title {
             padding-left: 20px;
             display: inline-block;
@@ -34,47 +41,77 @@
             white-space: nowrap;
         }
 
-        .search-form {
-            position: absolute;
-            right: 250px;
-            top: 66px;
+        .clear-fix::after{
+            content: "";
+            display: table;
+            clear: both;
         }
-        .blog-list{
-            margin-top: 50px;
-        }
-        .search-btn{
-            margin-left: 5px;
+        #filmPage {
+            /*height: 20px;*/
+            clear: both;
         }
     </style>
+
+    <script th:src="@{/layui/layui.js}"></script>
 </head>
 <body>
-<div class="container main">
-    <div class="alert alert-primary center" role="alert">使用webmagic爬取爱奇艺电影</div>
-    <form class="form-inline search-form " action="">
-        <div class="form-group">
-            <label for="exampleInputName2" class="title-label">电影名称</label>
-            <input type="text" class="form-control" id="exampleInputName2" placeholder="输入电影名称：">
-        </div>
+<div th:include="common/header::common"></div>
+<div class="layui-container">
+    <!--<form class="form-inline search-form " action="">-->
+        <!--<div class="form-group">-->
+            <!--<label for="exampleInputName2" class="title-label">电影名称</label>-->
+            <!--<input type="text" class="form-control" id="exampleInputName2" placeholder="输入电影名称：">-->
+        <!--</div>-->
 
-        <button type="submit" class="btn btn-primary search-btn">查找</button>
-    </form>
-    <ul class="list-group blog-list" >
-        <li class="list-group-item" th:each="film:${filmList}">
-            <a th:text="${film.title}" th:href="${film.url}" class="title" target="_blank">${film.title}</a>
-            <span class="score" th:text="'电影评分：'+${film.score}"></span>
-            <a class="play" th:href="'https://jx.618g.com/?url='+${film.url}" target="_blank">解析播放</a>
+        <!--<button type="submit" class="btn btn-primary search-btn">查找</button>-->
+    <!--</form>-->
+    <ul class="list-group">
+        <li>
+
+            <div th:each="film:${filmPage.content}" class="picWrap fl">
+                <img th:src="@{${film.imgUrl}}" class="pic-item" src="#" th:onclick="play([[${film.url}]])"/>
+                <a th:text="${film.title}" th:href="'https://jx.618g.com/?url='+${film.url}" class="title"
+                   target="_blank"> </a>
+            </div>
         </li>
     </ul>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
+    <div id="filmPage">
+        <div></div>
+    </div>
 </div>
 
+<!--<div th:include="common/footer::common" >-->
+<script>
+    function play(url) {
+        window.open("https://jx.618g.com/?url=" + url, "_blank")
+    }
+
+    layui.use('laypage', function () {
+        var laypage = layui.laypage;
+        var total = [[${filmPage.totalElements}]];
+        var size = [[${filmPage.size}]];
+        var num =[[${filmPage.number}]];
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'filmPage' //注意，这里的 test1 是 ID，不用加 # 号
+            , count: total //数据总数，从服务端得到
+            ,curr:num+1
+            , limit: size
+            , limits: [18, 24, 30, 36]
+            , jump: function (obj, first) {
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+
+                //首次不执行
+                if (!first) {
+                    //do something
+                    window.location.href = "/films/list.htm?num=" + obj.curr + "&size=" + obj.limit;
+                }
+            }
+
+        });
+    });
+</script>
 </body>
 </html>

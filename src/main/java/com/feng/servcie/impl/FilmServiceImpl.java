@@ -43,7 +43,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Page<Film> ListPage(Film search, int num, int size) {
-        Pageable pageable = PageRequest.of(num, size);
+        Pageable pageable = PageRequest.of(num-1, size);
         Specification specification = (Specification) (root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();

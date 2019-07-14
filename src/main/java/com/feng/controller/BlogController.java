@@ -2,8 +2,8 @@ package com.feng.controller;
 
 import com.feng.entity.Blog;
 import com.feng.servcie.BlogService;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +22,8 @@ public class BlogController {
     private  BlogService blogService;
 
     @GetMapping("/list.htm")
-    public String blogList(Blog search, Model model, @RequestParam(defaultValue = "1") int num,@RequestParam(defaultValue = "8") int size) {
-        PageInfo<Blog> blogPage = blogService.ListPage(search,num,size);
+    public String blogList(Blog search, Model model, @RequestParam(defaultValue = "1") int num,@RequestParam(defaultValue = "12") int size) {
+        Page<Blog> blogPage = blogService.ListPage(search,num,size);
         model.addAttribute("blogPage",blogPage);
         return "blog/list";
     }

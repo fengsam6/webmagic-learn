@@ -3,57 +3,96 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>博客列表</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <title>使用webmagic爬取CSDN博客</title>
     <style>
-        .main{
-            margin-top:10px;
+        .main {
+            margin-top: 10px;
         }
-        .center{
+
+        .center {
             text-align: center;
         }
-        .author{
+
+        .author {
             margin-left: 60px;
         }
-        .date{
+
+        .date {
             margin-left: 80px;
         }
-        .title{
+
+        .title {
             padding-left: 10px;
             display: inline-block;
             width: 240px;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space:nowrap;
+            white-space: nowrap;
+        }
+        #blogPage{
+            height: 20px;
         }
     </style>
 </head>
 <body>
-<div class="container main">
-    <div class="alert alert-primary center" role="alert" >使用webmagic爬取CSDN博客</div>
-    <ul class="list-group">
-        <li class="list-group-item" th:each="blog:${blogPage.list}">
-            <a th:text="${blog.title}" th:href="${blog.sourceUrl}" class="title" target="_blank">${blog.title}</a>
-            <span class="author" th:text="'博客作者：'+${blog.author}"></span>
-            <span class="date" th:text="'发表时间：'+${blog.publishTime}"></span>
-            <span class="date" th:text="${blog.readNum}"></span>
-        </li>
-    </ul>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#" onclick="go(1,8)">首页</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
+<div th:include="common/header::common"></div>
+<div class="layui-container main">
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>博客url</th>
+            <th>博客作者</th>
+            <th>发表时间</th>
+            <th>博客阅读量</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="blog:${blogPage.content}">
+            <td>
+                <a th:text="${blog.title}" th:href="${blog.sourceUrl}" class="title" target="_blank">${blog.title}</a>
+            </td>
+            <td><span class="author" th:text="${blog.author}"></span></td>
+            <td><span class="date" th:text="${blog.publishTime}"></span></td>
+            <td> <span class="date" th:text="${blog.readNum}"></span></span></td>
+        </tr>
+        </tbody>
+    </table>
+  <div id="blogPage"></div>
 </div>
+<div th:include="common/footer::common"></div>
+<script th:src="@{/layui/layui.js}"></script>
 <script>
-    function go(pageNum,pageSzie) {
-        window.location.href="/blogs/list.htm?num="+pageNum+"&size="+pageSzie
+    function go(pageNum, pageSzie) {
+        window.location.href = "/blogs/list.htm?num=" + pageNum + "&size=" + pageSzie
     }
+
+    layui.use('laypage', function () {
+        var laypage = layui.laypage;
+        var total = [[${blogPage.totalElements}]];
+        var size = [[${blogPage.size}]];
+        var num =[[${blogPage.number}]];
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'blogPage' //注意，这里的 test1 是 ID，不用加 # 号
+            , count: total //数据总数，从服务端得到
+            ,curr:num+1
+            , limit: size
+            , limits: [18, 24, 30, 36]
+            , jump: function (obj, first) {
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+
+                //首次不执行
+                if (!first) {
+                    //do something
+                    window.location.href = "/blogs/list.htm?num=" + obj.curr + "&size=" + obj.limit;
+                }
+            }
+
+        });
+    });
 </script>
 </body>
 </html>

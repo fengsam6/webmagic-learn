@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>header</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body >
+<div th:fragment="common">
+    <ul class="layui-nav layui-container" lay-filter="" >
+        <li class="layui-nav-item"><a href="/films/list.htm">爱奇艺电影列表</a></li>
+        <li class="layui-nav-item "><a href="/blogs/list.htm">CSDN博客列表</a></li>
+    </ul>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

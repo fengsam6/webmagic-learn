@@ -6,7 +6,7 @@ springBoot、mysql、springBoot Data JPA、webmagic、redis
 
 ### 运行效果
 
-![](运行效果/blog.gif)
+![](运行效果/webmagic-learn.gif)
 
 1. 电影列表页面
 

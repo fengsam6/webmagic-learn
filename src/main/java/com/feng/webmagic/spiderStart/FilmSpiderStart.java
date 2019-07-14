@@ -1,6 +1,7 @@
 package com.feng.webmagic.spiderStart;
 
 import com.feng.webmagic.PageProcess.FilmPageProcessor;
+import com.feng.webmagic.PageProcess.IQIYIFilmPageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
 import com.feng.webmagic.urlData.FilmUrlUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +52,14 @@ public class FilmSpiderStart {
                 .setDownloader(new HttpClientDownloader()).thread(5).run();
     }
 
+    public void IQIYIStart() {
+        String helpUrl[] = {"http://vip.iqiyi.com/hot.html?cid=1"};
+        log.info("启动爬虫。。。。。");
+        Spider.create(new IQIYIFilmPageProcessor())
+                .addUrl(helpUrl) //设置爬虫url
+                .addPipeline(filmPipeline)
+//                .setScheduler(redisScheduler)
+                .setDownloader(new HttpClientDownloader()).thread(5).run();
+    }
 
 }

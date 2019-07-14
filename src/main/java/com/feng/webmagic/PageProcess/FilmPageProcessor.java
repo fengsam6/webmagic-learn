@@ -44,16 +44,20 @@ public class FilmPageProcessor implements PageProcessor {
     }
 
 
-
     private Film resolve(Selectable li) {
         System.out.println(li.toString());
         String url = "https:" + li.xpath("//a[@class='qy-mod-link']/@href").toString();
         String title = li.xpath("//a[@class='qy-mod-link']/@title").toString();
-        String imgUrl = li.xpath("//div[@class='icon-tr']/img/@src").toString();
+        String imgUrl = li.xpath("//img/@src").toString();
         String score = li.xpath("//span[@class='text-score']/text()").toString();
         Film film = new Film(title, url, imgUrl, score);
         log.info("film:{}****************", film.toString());
         return film;
+    }
+
+    private String resolveImgUrl(Selectable li) {
+        String qyModCoverStyle = li.xpath("//div[@class='qy-mod-cover']/@style").toString();
+        return qyModCoverStyle;
     }
 
     //www.iqiyi.com/v_19rqxb34a0.html
