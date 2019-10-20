@@ -1,9 +1,13 @@
 package com.feng.init;
 
+import com.feng.webmagic.spiderStart.BlogSpiderStart;
 import com.feng.webmagic.spiderStart.FilmSpiderStart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * spring容器加载完，tomcat启动后,执行run方法
@@ -12,6 +16,8 @@ import org.springframework.stereotype.Component;
 public class ApplicationStartInit implements CommandLineRunner {
     @Autowired
     private FilmSpiderStart filmSpiderStart;
+    @Autowired
+    private BlogSpiderStart blogSpiderStart;
     @Override
     public void run(String... args)  {
         try {
@@ -20,8 +26,15 @@ public class ApplicationStartInit implements CommandLineRunner {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //将电影数据插入数据库中
-        filmSpiderStart.start();
-        filmSpiderStart.IQIYIStart();
+      ExecutorService executorService = Executors.newFixedThreadPool(3);
+        executorService.execute(()->{
+            //将电影数据插入数据库中
+            filmSpiderStart.IQIYIStart();
+            //图片是js渲染，需要动态解析
+            //todo 可能用htmlUnit解析，这个好像不稳定
+            filmSpiderStart.start();
+//            blogSpiderStart.start();
+        });
+
     }
 }

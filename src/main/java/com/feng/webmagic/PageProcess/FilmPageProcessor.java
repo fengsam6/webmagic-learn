@@ -3,6 +3,7 @@ package com.feng.webmagic.PageProcess;
 import com.feng.entity.Film;
 import javafx.collections.transformation.FilteredList;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -14,6 +15,7 @@ import java.util.List;
 
 /**
  * 使用webmagic框架爬爱奇艺影视
+ * todo 图片url需要动态解析
  */
 @Slf4j
 public class FilmPageProcessor implements PageProcessor {
@@ -50,6 +52,9 @@ public class FilmPageProcessor implements PageProcessor {
         String title = li.xpath("//a[@class='qy-mod-link']/@title").toString();
         String imgUrl = li.xpath("//img/@src").toString();
         String score = li.xpath("//span[@class='text-score']/text()").toString();
+        if(StringUtils.isEmpty(score)){
+            score=" ";
+        }
         Film film = new Film(title, url, imgUrl, score);
         log.info("film:{}****************", film.toString());
         return film;

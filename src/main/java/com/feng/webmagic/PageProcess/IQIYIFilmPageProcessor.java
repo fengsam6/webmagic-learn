@@ -2,6 +2,7 @@ package com.feng.webmagic.PageProcess;
 
 import com.feng.entity.Film;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -53,6 +54,9 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
         String title = li.xpath("//a[@class='site-piclist_pic_link']/@title").toString();
         String imgUrl = resolveImg(li);
         String score = li.xpath("//span[@class='text-score']/text()").toString();
+        if (StringUtils.isEmpty(score)) {
+            score = " ";
+        }
         Film film = new Film(title, url, imgUrl, score);
         log.info("film:{}****************", film.toString());
         return film;
