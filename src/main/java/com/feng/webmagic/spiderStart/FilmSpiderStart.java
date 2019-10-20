@@ -48,7 +48,7 @@ public class FilmSpiderStart {
         Spider.create(new FilmPageProcessor())
                 .addUrl(allUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
-                .setScheduler(redisScheduler)
+//                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader()).thread(5).run();
     }
 

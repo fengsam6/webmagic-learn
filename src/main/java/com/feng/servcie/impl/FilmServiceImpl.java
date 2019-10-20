@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -28,22 +29,24 @@ import java.util.List;
 public class FilmServiceImpl implements FilmService {
     @Autowired
     private FilmDao filmDao;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public Film add(Film film) {
-        try {
-            filmDao.save(film);
-        } catch (Exception e) {
-            log.error("{}", e.getMessage());
-            e.printStackTrace();
-        }
-
+        String sql = "INSERT INTO tb_film(`img_url`, `score`, `title`, `url`) VALUES('#1','#2','#3','#4')";
+        sql =sql.replaceAll("#1",film.getImgUrl());
+        sql =sql.replaceAll("#2",film.getScore());
+        sql =sql.replaceAll("#3",film.getTitle());
+        sql =sql.replaceAll("#4",film.getUrl());
+        jdbcTemplate.update(sql);
+//        filmDao.saveAndFlush(film);
         return film;
     }
 
     @Override
     public Page<Film> ListPage(Film search, int num, int size) {
-        Pageable pageable = PageRequest.of(num-1, size);
+        Pageable pageable = PageRequest.of(num - 1, size);
         Specification specification = (Specification) (root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
@@ -27,9 +28,11 @@ import java.util.List;
 public class BlogServiceImpl implements BlogService {
     @Autowired
     private BlogDao blogDao;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public Page<Blog> ListPage(Blog search, int num, int size) {
-        Pageable pageable = PageRequest.of(num-1, size);
+        Pageable pageable = PageRequest.of(num - 1, size);
         Specification specification = (Specification) (root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
@@ -43,13 +46,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog add(Blog blog) {
-        try {
-            blogDao.save(blog);
-        } catch (Exception e) {
-            log.error("{}", e.getMessage());
-            e.printStackTrace();
-        }
 
+        blogDao.save(blog);
         return blog;
     }
 }

@@ -13,7 +13,7 @@ public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 32)
-    private Integer id;
+    private Long id;
     @Column(length = 120)
     private String title;
     @Column(length = 170)

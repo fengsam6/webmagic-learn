@@ -25,7 +25,7 @@ public class BlogSpiderStart {
     @Autowired
     private RedisScheduler redisScheduler;
 
-    @Scheduled(cron = "* 0-30 9  * * ?")
+    @Scheduled(cron = "* 0-30 *  * * ?")
     @Async
     public void startScheduled() {
         start();
@@ -35,11 +35,12 @@ public class BlogSpiderStart {
         log.info("启动爬虫。。。。。");
         Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/wireless_com/article/details/89008061")
                 .addPipeline(blogPipeline)
-                .setScheduler(redisScheduler)
+//                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())
                 .thread(5).run();
         try {
-            Thread.sleep(6000);
+//            Thread.yield();
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
