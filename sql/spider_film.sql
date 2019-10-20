@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 127.0.0.1
-Source Server Version : 50558
-Source Host           : 127.0.0.1:3306
+Source Server         : localhost
+Source Server Version : 50645
+Source Host           : localhost:3306
 Source Database       : spider_blog
 
 Target Server Type    : MYSQL
-Target Server Version : 50558
+Target Server Version : 50645
 File Encoding         : 65001
 
-Date: 2019-06-17 18:34:17
+Date: 2019-10-20 17:12:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,7 +30,6 @@ CREATE TABLE `tb_blog` (
   UNIQUE KEY `title-url-unique` (`title`,`source_url`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1860 DEFAULT CHARSET=utf8;
 
-
 -- ----------------------------
 -- Table structure for tb_film
 -- ----------------------------
@@ -41,6 +40,10 @@ CREATE TABLE `tb_film` (
   `score` varchar(255) DEFAULT NULL,
   `title` varchar(120) DEFAULT NULL,
   `url` varchar(170) DEFAULT NULL,
+  `url_source` varchar(120) DEFAULT '' COMMENT '电影爬虫来源',
+  `type` varchar(100) DEFAULT '' COMMENT '电影类型',
+  `description` text,
+  `actor` varchar(220) DEFAULT '' COMMENT '导演',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title-url-unique` (`title`,`url`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=289 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21966 DEFAULT CHARSET=utf8;

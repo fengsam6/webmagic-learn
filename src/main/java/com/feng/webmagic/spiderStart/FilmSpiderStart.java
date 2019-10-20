@@ -29,6 +29,10 @@ public class FilmSpiderStart {
     private FilmDBPipeline filmPipeline;
     @Autowired
     private RedisScheduler redisScheduler;
+    @Autowired
+    private FilmPageProcessor filmPageProcessor;
+    @Autowired
+    private IQIYIFilmPageProcessor iqiyiFilmPageProcessor;
 
     /**
      * 可以开启定时爬虫
@@ -39,25 +43,33 @@ public class FilmSpiderStart {
         start();
     }
 
+    /**
+     *爬虫开始url https://list.iqiyi.com/www/1/-------------8-10-1-iqiyi--.html
+     */
     public void start() {
         log.info("启动爬虫。。。。。");
         String[] hotUrl = FilmUrlUtil.getHighScoreUrls();
         String[] highScoreUrls = FilmUrlUtil.getHighScoreUrls();
         String[] recentUrl = FilmUrlUtil.getRecentPublishUrls();
-        String[] highValueUrl = FilmUrlUtil.getHighValueUrls();//获取综合排序url
+        //获取综合排序url
+        String[] highValueUrl = FilmUrlUtil.getHighValueUrls();
+        //爬虫开始url
         String[] allUrl = FilmUrlUtil.getAllUrl();
-        Spider.create(new FilmPageProcessor())
+        Spider.create(filmPageProcessor)
                 .addUrl(allUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader()).thread(5).run();
     }
 
+    /**
+     * 爬虫开始url http://vip.iqiyi.com/hot.html?cid=1
+     */
     public void IQIYIStart() {
-        String helpUrl[] = {"http://vip.iqiyi.com/hot.html?cid=1"};
+        String startUrl[] = {"http://vip.iqiyi.com/hot.html?cid=1"};
         log.info("启动爬虫。。。。。");
-        Spider.create(new IQIYIFilmPageProcessor())
-                .addUrl(helpUrl) //设置爬虫url
+        Spider.create(iqiyiFilmPageProcessor)
+                .addUrl(startUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader()).thread(5).run();

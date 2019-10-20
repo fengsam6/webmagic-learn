@@ -3,6 +3,7 @@ package com.feng.webmagic.PageProcess;
 import com.feng.entity.Film;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -16,20 +17,21 @@ import java.util.List;
  * 使用webmagic框架爬爱奇艺影视
  */
 @Slf4j
+@Component
 public class IQIYIFilmPageProcessor implements PageProcessor {
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100)
             .setUserAgent(
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
     private static final String detailUrl = "http://www.iqiyi.com/dianying/vip.html";
-    private static final String helpUrl = "http://www\\.iqiyi\\.com/\\w*\\/vip.html";
-    private static final String helpUrl2 = "http://vip\\.iqiyi\\.com/hot\\.html\\?cid=1";
+    private static final String spiderUrl1 = "http://www\\.iqiyi\\.com/\\w*\\/vip.html";
+    private static final String spiderUrl2 = "http://vip\\.iqiyi\\.com/hot\\.html\\?cid=1";
 
     @Override
     public void process(Page page) {
 
-        if (page.getUrl().regex(helpUrl).match() || page.getUrl().regex(helpUrl2).match()) {
-            page.addTargetRequests(page.getHtml().links().regex(helpUrl).all());
-            page.addTargetRequests(page.getHtml().links().regex(helpUrl2).all());
+        if (page.getUrl().regex(spiderUrl1).match() || page.getUrl().regex(spiderUrl2).match()) {
+            page.addTargetRequests(page.getHtml().links().regex(spiderUrl1).all());
+            page.addTargetRequests(page.getHtml().links().regex(spiderUrl2).all());
             log.debug("{}", page.getUrl());
             Html html = page.getHtml();
 
@@ -58,6 +60,8 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
             score = " ";
         }
         Film film = new Film(title, url, imgUrl, score);
+        film.setUrlSource("爱奇艺影视");
+        film.setType("电影");
         log.info("film:{}****************", film.toString());
         return film;
     }

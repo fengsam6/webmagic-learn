@@ -1,26 +1,23 @@
 package com.feng;
 
-import com.feng.entity.Blog;
-import com.feng.servcie.BlogService;
+import com.feng.webmagic.spiderStart.Film360SpiderStart;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+/**
+ * Created by rf on 2019/6/16.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WebmagicLearnApplicationTests {
+public class Film360SpiderTest {
     @Autowired
-    private BlogService blogService;
+    private Film360SpiderStart film360SpiderStart;
 
     @Test
-    public void contextLoads() {
+    public void FilmSpiderStartTest() {
+        film360SpiderStart.film360Start();
     }
-
-    @Test
-    public void add() {
-        blogService.add(new Blog("test", "content", "11", "11", "0"));
-    }
-
 }

@@ -2,6 +2,7 @@ package com.feng.webmagic.PageProcess;
 
 import com.feng.entity.Blog;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -12,6 +13,7 @@ import us.codecraft.webmagic.selector.Html;
  */
 //TODO 之前解析可以，现在不能解析，有时间解决
 @Slf4j
+@Component
 public class BlogPageProcessor implements PageProcessor {
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100)
             .setUserAgent(

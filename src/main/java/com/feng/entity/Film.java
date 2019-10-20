@@ -19,8 +19,16 @@ public class Film {
     @Column(length = 170)
     private String url;
     @Column(length = 180)
-    private String imgUrl;
-    private String score;
+    private String imgUrl="";
+    private String score="";
+    @Column
+    private String urlSource="";
+    @Column
+    private String type="";
+    @Column
+    private String description="";
+    @Column
+    private String actor="";
 
 
     public Film(String title, String url, String imgUrl, String score) {

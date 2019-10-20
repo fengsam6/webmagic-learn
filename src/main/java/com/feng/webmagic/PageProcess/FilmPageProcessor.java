@@ -1,9 +1,9 @@
 package com.feng.webmagic.PageProcess;
 
 import com.feng.entity.Film;
-import javafx.collections.transformation.FilteredList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -18,18 +18,19 @@ import java.util.List;
  * todo 图片url需要动态解析
  */
 @Slf4j
+@Component
 public class FilmPageProcessor implements PageProcessor {
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100)
             .setUserAgent(
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
     private static final String detailUrl = "https://list.iqiyi.com/www/1/-------------8-1-1-iqiyi--.html";
-    private static final String helpUrl = "https://list\\.iqiyi\\.com/www/\\d+/\\d*-------------\\d+-\\d+-\\d+-iqiyi--.html";
+    private static final String spiderUrl = "https://list\\.iqiyi\\.com/www/\\d+/\\d*-------------\\d+-\\d+-\\d+-iqiyi--.html";
 
     @Override
     public void process(Page page) {
-        page.addTargetRequests(page.getHtml().links().regex(helpUrl).all());
+        page.addTargetRequests(page.getHtml().links().regex(spiderUrl).all());
         log.debug("{}", page.getUrl());
-        if (page.getUrl().regex(helpUrl).match()) {
+        if (page.getUrl().regex(spiderUrl).match()) {
             Html html = page.getHtml();
 
             List<Selectable> liSelectables = html.xpath("//ul[@class='qy-mod-ul']/li").nodes();
@@ -56,6 +57,8 @@ public class FilmPageProcessor implements PageProcessor {
             score=" ";
         }
         Film film = new Film(title, url, imgUrl, score);
+        film.setUrlSource("爱奇艺影视");
+        film.setType("电影");
         log.info("film:{}****************", film.toString());
         return film;
     }

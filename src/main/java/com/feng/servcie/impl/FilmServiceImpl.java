@@ -34,11 +34,17 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film add(Film film) {
-        String sql = "INSERT INTO tb_film(`img_url`, `score`, `title`, `url`) VALUES('#1','#2','#3','#4')";
+        String sql = "INSERT INTO " +
+                "tb_film(`img_url`, `score`, `title`, `url`, `type`, `url_source`, `description`, `actor`)" +
+                " VALUES('#1','#2','#3','#4','#5','#6','#7','#8' )";
         sql =sql.replaceAll("#1",film.getImgUrl());
         sql =sql.replaceAll("#2",film.getScore());
         sql =sql.replaceAll("#3",film.getTitle());
         sql =sql.replaceAll("#4",film.getUrl());
+        sql =sql.replaceAll("#5",film.getType());
+        sql =sql.replaceAll("#6",film.getUrlSource());
+        sql =sql.replaceAll("#7",film.getDescription());
+        sql =sql.replaceAll("#8",film.getActor());
         jdbcTemplate.update(sql);
 //        filmDao.saveAndFlush(film);
         return film;
