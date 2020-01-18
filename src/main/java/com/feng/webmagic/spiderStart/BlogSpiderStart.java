@@ -2,6 +2,7 @@ package com.feng.webmagic.spiderStart;
 
 import com.feng.webmagic.PageProcess.BlogPageProcessor;
 import com.feng.webmagic.pipeline.BlogDBPipeline;
+import com.feng.webmagic.urlData.BlogUrlData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +16,7 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 import javax.annotation.Resource;
 
 /**
- * 使用webmagic框架爬CSDN博客
+ * 使用webmagic框架，爬虫指定用户博客
  */
 @Component
 @Slf4j
@@ -24,6 +25,8 @@ public class BlogSpiderStart {
     private BlogDBPipeline blogPipeline;
     @Autowired
     private RedisScheduler redisScheduler;
+    @Autowired
+    private BlogPageProcessor blogPageProcessor;
 
     @Scheduled(cron = "* 0-30 *  * * ?")
     @Async
@@ -33,7 +36,7 @@ public class BlogSpiderStart {
 
     public void start() {
         log.info("启动爬虫。。。。。");
-        Spider.create(new BlogPageProcessor()).addUrl("https://blog.csdn.net/wireless_com/article/details/89008061")
+        Spider.create(blogPageProcessor).addUrl(BlogUrlData.getSpiderUrl())
                 .addPipeline(blogPipeline)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())

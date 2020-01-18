@@ -35,9 +35,8 @@ public class ApplicationStartInit implements CommandLineRunner {
             filmSpiderStart.IQIYIStart();
             film360SpiderStart.film360Start();
             //图片是js渲染，需要动态解析
-            //todo 可能用htmlUnit解析，这个好像不稳定
             filmSpiderStart.start();
-//            blogSpiderStart.start();
+            blogSpiderStart.start();
         });
 
     }
