@@ -1,4 +1,4 @@
-package com.feng.webmagic.urlData;
+package com.feng.webmagic.urlDataConfig;
 
 import lombok.extern.slf4j.Slf4j;
 

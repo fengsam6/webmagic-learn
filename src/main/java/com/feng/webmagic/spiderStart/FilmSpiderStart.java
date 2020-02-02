@@ -3,21 +3,14 @@ package com.feng.webmagic.spiderStart;
 import com.feng.webmagic.PageProcess.FilmPageProcessor;
 import com.feng.webmagic.PageProcess.IQIYIFilmPageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
-import com.feng.webmagic.urlData.FilmUrlUtil;
+import com.feng.webmagic.urlDataConfig.FilmUrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
-import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 使用webmagic框架爬爱奇艺影视

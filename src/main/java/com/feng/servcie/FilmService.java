@@ -14,4 +14,6 @@ public interface FilmService {
     Film add(Film film);
 
     Page<Film> ListPage(Film search, int num, int size);
+
+     Page<Film> ListByConditionAndPage(Film search, int num, int size);
 }

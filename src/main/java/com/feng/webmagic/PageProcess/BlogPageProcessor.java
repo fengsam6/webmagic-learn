@@ -1,7 +1,7 @@
 package com.feng.webmagic.PageProcess;
 
 import com.feng.entity.Blog;
-import com.feng.webmagic.urlData.BlogUrlData;
+import com.feng.webmagic.urlDataConfig.BlogUrlData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;

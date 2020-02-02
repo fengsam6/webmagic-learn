@@ -20,7 +20,8 @@ public class Film {
     private String url;
     @Column(length = 180)
     private String imgUrl="";
-    private String score="";
+    @Column
+    private String score;
     @Column
     private String urlSource="";
     @Column

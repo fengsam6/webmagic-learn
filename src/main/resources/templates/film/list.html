@@ -12,6 +12,11 @@
             list-style: none;
         }
 
+        .blank {
+            display: inline-block;
+            margin-left: 20px;
+        }
+
         .pic-item {
             cursor: pointer;
             display: block;
@@ -24,7 +29,7 @@
         .picWrap {
             display: inline-block;
             width: 180px;
-            height: 236px;
+            height: 248px;
             margin: 20px 4px;
         }
 
@@ -41,14 +46,22 @@
             white-space: nowrap;
         }
 
-        .clear-fix::after{
+        .scoreWrap {
+            margin-left: 20px;
+        }
+
+        .clear-fix::after {
             content: "";
             display: table;
             clear: both;
         }
+        .search-form{
+            margin-top: 8px;
+        }
         #filmPage {
             /*height: 20px;*/
             clear: both;
+            margin-top: 80px;
         }
     </style>
 
@@ -57,14 +70,15 @@
 <body>
 <div th:include="common/header::common"></div>
 <div class="layui-container">
-    <!--<form class="form-inline search-form " action="">-->
-        <!--<div class="form-group">-->
-            <!--<label for="exampleInputName2" class="title-label">电影名称</label>-->
-            <!--<input type="text" class="form-control" id="exampleInputName2" placeholder="输入电影名称：">-->
-        <!--</div>-->
-
-        <!--<button type="submit" class="btn btn-primary search-btn">查找</button>-->
-    <!--</form>-->
+    <div class="layui-form  search-form ">
+        <div class="layui-form-item layui-inline">
+            <label for="filmName" class="title-label">电影名称</label>
+            <input type="text" class="form-control" id="filmName" placeholder="输入电影名称：">
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn blank  layui-btn-xs" onclick="searchFilm()">查找</button>
+        </div>
+    </div>
     <ul class="list-group">
         <li>
 
@@ -72,6 +86,9 @@
                 <img th:src="@{${film.imgUrl}}" class="pic-item" src="#" th:onclick="play([[${film.url}]])"/>
                 <a th:text="${film.title}" th:href="'https://jx.618g.com/?url='+${film.url}" class="title"
                    target="_blank"> </a>
+                <span th:if="${film.score} !=''" class="scoreWrap">
+                <span class="score" th:text="'评分：'+${film.score}">score</span>
+                </span>
             </div>
         </li>
     </ul>
@@ -82,6 +99,20 @@
 
 <!--<div th:include="common/footer::common" >-->
 <script>
+    var pageNum = 1, pageSize = 20;
+
+    function searchFilm() {
+        var filmName = '';
+        layui.use(['jquery'], function () {
+            var $ = layui.$;//重点处
+            filmName = $("#filmName").val();
+        debugger
+            window.location.href = "/films/list.htm?title=" + filmName + "&num=" + pageNum + "&size=" + pageSize;
+             $("#filmName").val(filmName)
+        });
+
+    }
+
     function play(url) {
         //可以更换解析url：http://api.baiyug.vip/index.php
         window.open("https://jx.618g.com/?url=" + url, "_blank")
@@ -91,18 +122,20 @@
         var laypage = layui.laypage;
         var total = [[${filmPage.totalElements}]];
         var size = [[${filmPage.size}]];
-        var num =[[${filmPage.number}]];
+        var num = [[${filmPage.number}]];
         //执行一个laypage实例
         laypage.render({
             elem: 'filmPage' //注意，这里的 test1 是 ID，不用加 # 号
             , count: total //数据总数，从服务端得到
-            ,curr:num+1
+            , curr: num + 1
             , limit: size
             , limits: [18, 24, 30, 36]
             , jump: function (obj, first) {
                 //obj包含了当前分页的所有参数，比如：
                 console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                pageNum = obj.curr;
                 console.log(obj.limit); //得到每页显示的条数
+                pageSize = obj.limit;
 
                 //首次不执行
                 if (!first) {

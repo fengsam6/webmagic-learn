@@ -1,11 +1,8 @@
 package com.feng.webmagic.spiderStart;
 
 import com.feng.webmagic.PageProcess.Film360PageProcessor;
-import com.feng.webmagic.PageProcess.FilmPageProcessor;
-import com.feng.webmagic.PageProcess.IQIYIFilmPageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
-import com.feng.webmagic.urlData.Film360UrlUtil;
-import com.feng.webmagic.urlData.FilmUrlUtil;
+import com.feng.webmagic.urlDataConfig.Film360UrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
