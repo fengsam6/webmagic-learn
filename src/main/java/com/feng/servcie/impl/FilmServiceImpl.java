@@ -36,7 +36,7 @@ public class FilmServiceImpl implements FilmService {
         String sql = "INSERT INTO " +
                 "tb_film(`img_url`, `score`, `title`, `url`, `type`, `url_source`, `description`, `actor`)" +
                 " VALUES(?,?,?,?,?,?,?,? )";
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
 
         params.add(film.getImgUrl());
         params.add(film.getScore());
@@ -57,9 +57,17 @@ public class FilmServiceImpl implements FilmService {
         Specification specification = (Specification) (root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
-            if (search != null && StringUtils.isNotBlank(search.getTitle())) {
-                predicates.add(criteriaBuilder.like(root.get("title"), "%" + search.getTitle() + "%"));
+            if (search != null) {
+                String title = search.getTitle();
+                if (StringUtils.isNotBlank(title)) {
+                    predicates.add(criteriaBuilder.like(root.get("title"), "%" + title + "%"));
+                }
+                String urlSource = search.getUrlSource();
+                if (StringUtils.isNotBlank(urlSource)) {
+                    predicates.add(criteriaBuilder.equal(root.get("urlSource"), urlSource));
+                }
             }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
         return filmDao.findAll(specification, pageable);

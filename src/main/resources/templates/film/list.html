@@ -26,10 +26,18 @@
             border: 2px solid #01AAED;
         }
 
+        .filmSource {
+            width: 200px;
+        }
+
+        .inputWidth {
+            width: 120px;
+        }
+
         .picWrap {
             display: inline-block;
             width: 180px;
-            height: 248px;
+            height: 268px;
             margin: 20px 4px;
         }
 
@@ -55,9 +63,11 @@
             display: table;
             clear: both;
         }
-        .search-form{
+
+        .search-form {
             margin-top: 8px;
         }
+
         #filmPage {
             /*height: 20px;*/
             clear: both;
@@ -70,25 +80,41 @@
 <body>
 <div th:include="common/header::common"></div>
 <div class="layui-container">
-    <div class="layui-form  search-form ">
+    <form class="layui-form  search-form ">
         <div class="layui-form-item layui-inline">
-            <label for="filmName" class="title-label">电影名称</label>
-            <input type="text" class="form-control" id="filmName" placeholder="输入电影名称：">
+            <label for="filmName" class="layui-form-label">电影名称</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="title" id="filmName" placeholder="输入电影名称："
+                       th:value="${search.title}">
+            </div>
+        </div>
+        <div class="layui-form-item   blank">
+            <label for="urlSource" class="layui-form-label">电影来源</label>
+            <div class="layui-input-block">
+                <select name="urlSource" id="urlSource" class="form-control">
+                    <option value="" th:selected="${search.urlSource} eq ''"  selected>所有影视</option>
+                    <option value="爱奇艺影视"  th:selected="${search.urlSource} eq '爱奇艺影视' ">爱奇艺影视</option>
+                    <option value="360影视" th:selected="${search.urlSource} eq '360影视'">360影视</option>
+                </select>
+            </div>
         </div>
         <div class="layui-form-item layui-inline">
-            <button class="layui-btn blank  layui-btn-xs" onclick="searchFilm()">查找</button>
+            <button type="button" class="layui-btn blank  layui-btn-sm" onclick="searchFilm()">查找</button>
+            <button type="button" class="layui-btn blank  layui-btn-sm" onclick="resetFilm()">重置</button>
         </div>
-    </div>
+    </form>
     <ul class="list-group">
         <li>
-
             <div th:each="film:${filmPage.content}" class="picWrap fl">
                 <img th:src="@{${film.imgUrl}}" class="pic-item" src="#" th:onclick="play([[${film.url}]])"/>
                 <a th:text="${film.title}" th:href="'https://jx.618g.com/?url='+${film.url}" class="title"
                    target="_blank"> </a>
-                <span th:if="${film.score} !=''" class="scoreWrap">
-                <span class="score" th:text="'评分：'+${film.score}">score</span>
-                </span>
+                <div   class="scoreWrap">
+                    评分：<span class="score" th:text="${film.score}">score</span>
+                </div>
+                <div   class="scoreWrap">
+                    视频来源：<span class="score" th:text="${film.urlSource}">score</span>
+                </div>
             </div>
         </li>
     </ul>
@@ -99,16 +125,19 @@
 
 <!--<div th:include="common/footer::common" >-->
 <script>
-    var pageNum = 1, pageSize = 20;
-
+    var pageNum = 1, pageSize = 30;
+    function resetFilm() {
+        window.location.href = "/films/list.htm?num=" + pageNum + "&size=" + pageSize;
+    }
     function searchFilm() {
         var filmName = '';
         layui.use(['jquery'], function () {
             var $ = layui.$;//重点处
             filmName = $("#filmName").val();
+            var formData = $("form").serialize();
         debugger
-            window.location.href = "/films/list.htm?title=" + filmName + "&num=" + pageNum + "&size=" + pageSize;
-             $("#filmName").val(filmName)
+            window.location.href = "/films/list.htm?" + formData + "&num=" + pageNum + "&size=" + pageSize;
+            $("#filmName").val(filmName)
         });
 
     }
@@ -118,18 +147,21 @@
         window.open("https://jx.618g.com/?url=" + url, "_blank")
     }
 
-    layui.use('laypage', function () {
+    layui.use(['laypage', 'form'], function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
         var laypage = layui.laypage;
         var total = [[${filmPage.totalElements}]];
         var size = [[${filmPage.size}]];
         var num = [[${filmPage.number}]];
         //执行一个laypage实例
         laypage.render({
-            elem: 'filmPage' //注意，这里的 test1 是 ID，不用加 # 号
+            elem: 'filmPage', //注意，这里的 test1 是 ID，不用加 # 号
+            layout: ['count', 'limit', 'prev', 'page', 'next', 'skip']
             , count: total //数据总数，从服务端得到
             , curr: num + 1
-            , limit: size
-            , limits: [18, 24, 30, 36]
+            , limit: size,
+            groups: 10
+            , limits: [20, 30, 50, 100]
             , jump: function (obj, first) {
                 //obj包含了当前分页的所有参数，比如：
                 console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。

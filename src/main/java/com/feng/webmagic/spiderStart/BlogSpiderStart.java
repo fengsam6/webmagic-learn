@@ -1,5 +1,6 @@
 package com.feng.webmagic.spiderStart;
 
+import com.feng.servcie.TableOptService;
 import com.feng.webmagic.PageProcess.BlogPageProcessor;
 import com.feng.webmagic.pipeline.BlogDBPipeline;
 import com.feng.webmagic.urlDataConfig.BlogUrlData;
@@ -20,14 +21,19 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 public class BlogSpiderStart {
     @Autowired
     private BlogDBPipeline blogPipeline;
-    @Autowired
+//    @Autowired
     private RedisScheduler redisScheduler;
     @Autowired
     private BlogPageProcessor blogPageProcessor;
-
-    @Scheduled(cron = "* 0-30 *  * * ?")
+    @Autowired
+    private TableOptService tableOptService;
+    /**
+     * 每隔3天，清空博客数据重新爬虫
+     */
+    @Scheduled(cron = "* * 5 0/3 * ?")
     @Async
     public void startScheduled() {
+        tableOptService.cleanTableData("tb_blog");
         start();
     }
 

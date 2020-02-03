@@ -1,5 +1,6 @@
 package com.feng.webmagic.spiderStart;
 
+import com.feng.servcie.TableOptService;
 import com.feng.webmagic.PageProcess.FilmPageProcessor;
 import com.feng.webmagic.PageProcess.IQIYIFilmPageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
@@ -20,24 +21,28 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 public class FilmSpiderStart {
     @Autowired
     private FilmDBPipeline filmPipeline;
-    @Autowired
+//    @Autowired
     private RedisScheduler redisScheduler;
     @Autowired
     private FilmPageProcessor filmPageProcessor;
     @Autowired
     private IQIYIFilmPageProcessor iqiyiFilmPageProcessor;
+    @Autowired
+    private TableOptService tableOptService;
 
     /**
-     * 可以开启定时爬虫
+     * 每隔3天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
      */
-        @Scheduled(cron = "* 0-30 9 * * ?")
+    @Scheduled(cron = "* * 2 0/3 * ?")
     public void startScheduled() {
+        //清空表tb_film数据，再重新爬取
+        tableOptService.cleanTableData("tb_film");
         start();
     }
 
     /**
-     *爬虫开始url https://list.iqiyi.com/www/1/-------------8-10-1-iqiyi--.html
+     * 爬虫开始url https://list.iqiyi.com/www/1/-------------8-10-1-iqiyi--.html
      */
     public void start() {
         log.info("启动爬虫。。。。。");
@@ -59,7 +64,7 @@ public class FilmSpiderStart {
      * 爬虫开始url http://vip.iqiyi.com/hot.html?cid=1
      */
     public void IQIYIStart() {
-        String startUrl[] = {"http://vip.iqiyi.com/hot.html?cid=1"};
+        String[] startUrl = {"http://vip.iqiyi.com/hot.html?cid=1"};
         log.info("启动爬虫。。。。。");
         Spider.create(iqiyiFilmPageProcessor)
                 .addUrl(startUrl) //设置爬虫url

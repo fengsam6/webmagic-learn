@@ -20,9 +20,10 @@ public class FilmController {
     private  FilmService filmService;
 
     @GetMapping("/list.htm")
-    public String filmList(Film search, Model model, @RequestParam(defaultValue = "1") int num,@RequestParam(defaultValue = "24") int size) {
+    public String filmList(Film search, Model model, @RequestParam(defaultValue = "1") int num,@RequestParam(defaultValue = "30") int size) {
         Page<Film> filmPage = filmService.ListPage(search,num,size);
         model.addAttribute("filmPage",filmPage);
+        model.addAttribute("search",search);
         return "film/list";
     }
 

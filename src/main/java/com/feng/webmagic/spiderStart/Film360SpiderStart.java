@@ -1,5 +1,6 @@
 package com.feng.webmagic.spiderStart;
 
+import com.feng.servcie.TableOptService;
 import com.feng.webmagic.PageProcess.Film360PageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
 import com.feng.webmagic.urlDataConfig.Film360UrlUtil;
@@ -23,14 +24,18 @@ public class Film360SpiderStart {
     private RedisScheduler redisScheduler;
     @Autowired
     private Film360PageProcessor film360PageProcessor;
+    @Autowired
+    private TableOptService tableOptService;
 
     /**
-     * 可以开启定时爬虫
+     * 每隔3天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
      */
-        @Scheduled(cron = "* 0-30 9 * * ?")
+    @Scheduled(cron = "* * 4 0/3 * ?")
     public void startScheduled() {
-            film360Start();
+        //清空表tb_film数据，再重新爬取
+//        tableOptService.cleanTableData("tb_film");
+        film360Start();
     }
 
 
