@@ -34,7 +34,7 @@ public class FilmSpiderStart {
      * 每隔3天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
      */
-    @Scheduled(cron = "* * 2 0/3 * ?")
+    @Scheduled(cron = "* * 2 0/2 * ?")
     public void startScheduled() {
         //清空表tb_film数据，再重新爬取
         tableOptService.cleanTableData("tb_film");

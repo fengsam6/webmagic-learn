@@ -28,9 +28,9 @@ public class BlogSpiderStart {
     @Autowired
     private TableOptService tableOptService;
     /**
-     * 每隔3天，清空博客数据重新爬虫
+     * 每隔2天，清空博客数据重新爬虫
      */
-    @Scheduled(cron = "* * 5 0/3 * ?")
+    @Scheduled(cron = "* * 5 0/2 * ?")
     @Async
     public void startScheduled() {
         tableOptService.cleanTableData("tb_blog");
@@ -43,12 +43,6 @@ public class BlogSpiderStart {
                 .addPipeline(blogPipeline)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())
-                .thread(5).run();
-        try {
-//            Thread.yield();
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                .run();
     }
 }

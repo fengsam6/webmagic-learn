@@ -3,6 +3,7 @@ package com.feng.webmagic.PageProcess;
 import com.feng.entity.Film;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -19,7 +20,10 @@ import java.util.List;
 @Slf4j
 @Component
 public class IQIYIFilmPageProcessor implements PageProcessor {
-    private Site site = Site.me().setRetryTimes(3).setSleepTime(100)
+//    设置爬虫间隔时间
+    @Value("${system.spiderIntervalSecond}")
+    private int spiderIntervalSecond = 2;
+    private Site site = Site.me().setRetryTimes(3).setSleepTime(spiderIntervalSecond * 1000)
             .setUserAgent(
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
     private static final String detailUrl = "http://www.iqiyi.com/dianying/vip.html";

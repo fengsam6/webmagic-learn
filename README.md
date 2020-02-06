@@ -1,12 +1,14 @@
 # 一、webmagic-learn
 ## 1.介绍
-1. 使用webmagic爬取CSDN博客，爬取爱奇艺视频，使用redis缓存爬虫爬过的url
+1. 使用webmagic、springboot爬取CSDN博客，爬取爱奇艺视频、360影视。每隔2天，清空爬虫数据，重新爬取数据。
 ## 2.后端技术
 springBoot、mysql、springBoot Data JPA、webmagic、redis
 
 ## 3.运行效果
 
-![](运行效果/webmagic-learn.gif)
+* 具体效果可以访问：http://152.136.105.250:8066/
+
+![](运行效果/film_spider.gif)
 
 1. 电影列表页面
 
@@ -21,8 +23,6 @@ springBoot、mysql、springBoot Data JPA、webmagic、redis
 2. 电影列表数据库数据
 
    > 使用webmagic从爱奇艺官网爬取数据，并且将数据存放mysql数据中。
-
-   
 
    <img src="运行效果/films-DB-data.png" width="680" >
 
@@ -58,7 +58,8 @@ springBoot、mysql、springBoot Data JPA、webmagic、redis
 2. 下载项目代码。执行git clone git@gitee.com:fengsam618/webmagic-learn.git,将项目导入idea中
 3. 将sql文件夹下spider_film.sql在Navicat中执行。成功执行会创建两张表
 4. 修改resource目录下 application-dev.properties。重点修改连接数据库名称、登录用户名称、密码
-5. 启动成功后，浏览器访问http://localhost/
+5. idea打开，启动成功后，浏览器访问http://localhost/
+6. 部署可以参考bin目录脚本
 
 
 
