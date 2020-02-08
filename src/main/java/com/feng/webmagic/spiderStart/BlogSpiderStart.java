@@ -1,6 +1,7 @@
 package com.feng.webmagic.spiderStart;
 
 import com.feng.servcie.TableOptService;
+import com.feng.util.CpuNumUtils;
 import com.feng.webmagic.PageProcess.BlogPageProcessor;
 import com.feng.webmagic.pipeline.BlogDBPipeline;
 import com.feng.webmagic.urlDataConfig.BlogUrlData;
@@ -27,6 +28,7 @@ public class BlogSpiderStart {
     private BlogPageProcessor blogPageProcessor;
     @Autowired
     private TableOptService tableOptService;
+    private int cpuN = CpuNumUtils.getCpuNum();
     /**
      * 每隔2天，清空博客数据重新爬虫
      */
@@ -40,7 +42,7 @@ public class BlogSpiderStart {
     public void start() {
         log.info("启动爬虫。。。。。");
         Spider.create(blogPageProcessor).addUrl(BlogUrlData.getSpiderUrl())
-                .addPipeline(blogPipeline)
+                .addPipeline(blogPipeline).thread(cpuN+1)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())
                 .run();

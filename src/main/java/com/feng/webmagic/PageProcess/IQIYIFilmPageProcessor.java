@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @Component
 public class IQIYIFilmPageProcessor implements PageProcessor {
-//    设置爬虫间隔时间
+    //    设置爬虫间隔时间
     @Value("${system.spiderIntervalSecond}")
     private int spiderIntervalSecond = 2;
     private Site site = Site.me().setRetryTimes(3).setSleepTime(spiderIntervalSecond * 1000)
@@ -28,6 +28,7 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
     private static final String detailUrl = "http://www.iqiyi.com/dianying/vip.html";
     private static final String spiderUrl1 = "http://www\\.iqiyi\\.com/\\w*\\/vip.html";
+    //    爱奇艺爬虫电影页面
     private static final String spiderUrl2 = "http://vip\\.iqiyi\\.com/hot\\.html\\?cid=1";
 
     @Override
@@ -59,13 +60,29 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
         url = checkHttpPrefixAndAdd(url);
         String title = li.xpath("//a[@class='site-piclist_pic_link']/@title").toString();
         String imgUrl = resolveImg(li);
-        String score = li.xpath("//span[@class='text-score']/text()").toString();
-        if (StringUtils.isEmpty(score)) {
-            score = " ";
+        Selectable scoreEle = li.xpath("//span[@class='score']");
+        String scoreEleStr = scoreEle.toString();
+        String scoreLeft = scoreEle.xpath("strong/text()").toString();
+        String score="";
+        if(!StringUtils.isEmpty(scoreEleStr)){
+            score = scoreLeft;
+            String scoreRight = null;
+            try {
+                scoreRight = scoreEleStr.substring(scoreEleStr.lastIndexOf("."),scoreEleStr.lastIndexOf("</span>")).trim();
+            } catch (Exception e) {
+                scoreRight="";
+            }
+            if (!StringUtils.isEmpty(scoreRight)) {
+                score += scoreRight;
+            }
         }
+
+
+        String des = li.xpath("//p[@class='site-piclist_info_describe']/text()").toString();
         Film film = new Film(title, url, imgUrl, score);
         film.setUrlSource("爱奇艺影视");
         film.setType("电影");
+        film.setDescription(des);
         log.info("film:{}****************", film.toString());
         return film;
     }

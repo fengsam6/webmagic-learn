@@ -1,6 +1,7 @@
 package com.feng.webmagic.spiderStart;
 
 import com.feng.servcie.TableOptService;
+import com.feng.util.CpuNumUtils;
 import com.feng.webmagic.PageProcess.FilmPageProcessor;
 import com.feng.webmagic.PageProcess.IQIYIFilmPageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
@@ -29,20 +30,27 @@ public class FilmSpiderStart {
     private IQIYIFilmPageProcessor iqiyiFilmPageProcessor;
     @Autowired
     private TableOptService tableOptService;
+    private int cpuN = CpuNumUtils.getCpuNum();
 
     /**
-     * 每隔3天，清空电影数据重新爬虫
-     * todo 做个web页面定时调度
+     * 每隔2天，清空电影数据重新爬虫
+     * 这个爬虫获取数据为主
      */
-    @Scheduled(cron = "* * 2 0/2 * ?")
-    public void startScheduled() {
+    @Scheduled(cron = "* * 1 0/2 * ?")
+    public void IQIYIStartScheduled() {
         //清空表tb_film数据，再重新爬取
         tableOptService.cleanTableData("tb_film");
+        IQIYIStart();
+    }
+
+    @Scheduled(cron = "* * 5 0/2 * ?")
+    public void startScheduled2() {
         start();
     }
 
     /**
      * 爬虫开始url https://list.iqiyi.com/www/1/-------------8-10-1-iqiyi--.html
+     *
      */
     public void start() {
         log.info("启动爬虫。。。。。");
@@ -57,7 +65,7 @@ public class FilmSpiderStart {
                 .addUrl(allUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
 //                .setScheduler(redisScheduler)
-                .setDownloader(new HttpClientDownloader()).thread(5).run();
+                .setDownloader(new HttpClientDownloader()).thread(cpuN+1).run();
     }
 
     /**
@@ -70,7 +78,7 @@ public class FilmSpiderStart {
                 .addUrl(startUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
 //                .setScheduler(redisScheduler)
-                .setDownloader(new HttpClientDownloader()).thread(5).run();
+                .setDownloader(new HttpClientDownloader()).thread(cpuN+1).run();
     }
 
 }

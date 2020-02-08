@@ -5,13 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class ApplicationContextInfoUtils {
-    private static Logger logger = LoggerFactory.getLogger("");
-    public static void printSystemInfo(ApplicationContext applicationContext) {
+    private static Logger logger = LoggerFactory.getLogger(ApplicationContextInfoUtils.class);
+    public static void printSystemInfo(ApplicationContext applicationContext) throws Exception {
         Environment environment = applicationContext.getEnvironment();
         String port = environment.getProperty("server.port");
         String contextPath = environment.getProperty("server.servlet.context-path");
-        String baseUrl = "http://localhost:"+port;
+//        HttpServletRequest request = HttpServletRequestUtils.getHttpServletRequest();
+        String ip = "localhost";
+        String baseUrl = "http://"+ip+":"+port;
         String indexUrl = baseUrl;
         if(contextPath!=null){
             indexUrl = baseUrl+contextPath;

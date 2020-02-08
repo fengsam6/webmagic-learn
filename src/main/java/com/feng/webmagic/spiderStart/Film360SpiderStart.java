@@ -1,6 +1,7 @@
 package com.feng.webmagic.spiderStart;
 
 import com.feng.servcie.TableOptService;
+import com.feng.util.CpuNumUtils;
 import com.feng.webmagic.PageProcess.Film360PageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
 import com.feng.webmagic.urlDataConfig.Film360UrlUtil;
@@ -26,15 +27,13 @@ public class Film360SpiderStart {
     private Film360PageProcessor film360PageProcessor;
     @Autowired
     private TableOptService tableOptService;
-
+    private int cpuN = CpuNumUtils.getCpuNum();
     /**
      * 每隔2天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
      */
-    @Scheduled(cron = "* * 4 0/2 * ?")
+    @Scheduled(cron = "* * 3 0/2 * ?")
     public void startScheduled() {
-        //清空表tb_film数据，再重新爬取
-//        tableOptService.cleanTableData("tb_film");
         film360Start();
     }
 
@@ -48,7 +47,7 @@ public class Film360SpiderStart {
         Spider.create(film360PageProcessor)
                 .addUrl(startUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
-                .setDownloader(new HttpClientDownloader()).thread(5).run();
+                .setDownloader(new HttpClientDownloader()).thread(cpuN+1).run();
     }
 
 }
