@@ -29,7 +29,7 @@ public class Film360SpiderStart {
     private TableOptService tableOptService;
     private int cpuN = CpuNumUtils.getCpuNum();
     /**
-     * 每隔2天，清空电影数据重新爬虫
+     * 每隔1天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
      */
     @Scheduled(cron = "* * 6 0/1 * ?")

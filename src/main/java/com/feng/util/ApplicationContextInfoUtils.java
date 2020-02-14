@@ -19,7 +19,7 @@ public class ApplicationContextInfoUtils {
     public static void printSystemInfo(Environment environment){
         String port = environment.getProperty("server.port");
         String contextPath = environment.getProperty("server.servlet.context-path");
-        String ip = IPUtils.getSelfMachineIP();
+        String ip = IPUtils.getSelfMachineIP2();
         String baseUrl = "http://" + ip + ":" + port;
         String indexUrl = baseUrl;
         if (contextPath != null) {

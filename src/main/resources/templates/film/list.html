@@ -92,8 +92,8 @@
             <label for="urlSource" class="layui-form-label">电影来源</label>
             <div class="layui-input-block">
                 <select name="urlSource" id="urlSource" class="form-control">
-                    <option value="" th:selected="${search.urlSource} eq ''"  selected>所有影视</option>
-                    <option value="爱奇艺影视"  th:selected="${search.urlSource} eq '爱奇艺影视' ">爱奇艺影视</option>
+                    <option value="" th:selected="${search.urlSource} eq ''" selected>所有影视</option>
+                    <option value="爱奇艺影视" th:selected="${search.urlSource} eq '爱奇艺影视' ">爱奇艺影视</option>
                     <option value="360影视" th:selected="${search.urlSource} eq '360影视'">360影视</option>
                 </select>
             </div>
@@ -109,10 +109,10 @@
                 <img th:src="@{${film.imgUrl}}" class="pic-item" src="#" th:onclick="play([[${film.url}]])"/>
                 <a th:text="${film.title}" th:href="'https://jx.618g.com/?url='+${film.url}" class="title"
                    target="_blank"> </a>
-                <div   class="scoreWrap">
+                <div class="scoreWrap">
                     评分：<span class="score" th:text="${film.score}">score</span>
                 </div>
-                <div   class="scoreWrap">
+                <div class="scoreWrap">
                     视频来源：<span class="score" th:text="${film.urlSource}">score</span>
                 </div>
             </div>
@@ -126,9 +126,11 @@
 <!--<div th:include="common/footer::common" >-->
 <script>
     var pageNum = 1, pageSize = 30;
+
     function resetFilm() {
         window.location.href = "/films/list.htm?num=" + pageNum + "&size=" + pageSize;
     }
+
     function searchFilm() {
         var filmName = '';
         layui.use(['jquery'], function () {
@@ -147,7 +149,8 @@
         window.open("https://jx.618g.com/?url=" + url, "_blank")
     }
 
-    layui.use(['laypage', 'form'], function () {
+    layui.use(['laypage', 'form', 'jquery'], function () {
+        var $ = layui.$;//重点处
         var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
         var laypage = layui.laypage;
         var total = [[${filmPage.totalElements}]];
@@ -172,7 +175,10 @@
                 //首次不执行
                 if (!first) {
                     //do something
-                    window.location.href = "/films/list.htm?num=" + obj.curr + "&size=" + obj.limit;
+                    // window.location.href = "/films/list.htm?num=" + obj.curr + "&size=" + obj.limit;
+                    var formData = $("form").serialize();
+                debugger
+                    window.location.href = "/films/list.htm?" + formData + "&num=" + pageNum + "&size=" + pageSize;
                 }
             }
 

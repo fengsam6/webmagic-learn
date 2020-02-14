@@ -54,7 +54,7 @@ public class FilmSpiderStart {
         IQIYIStart();
     }
 
-    @Scheduled(cron = "* * 3 0/1 * ?")
+    @Scheduled(cron = "* * 2 0/1 * ?")
     public void startScheduled2() {
         String curDate = DateUtils.getCurDateStr();
         log.debug("IQIYIStartScheduled2 at {}",curDate);
