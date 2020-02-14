@@ -23,6 +23,10 @@ public class BlogDBPipeline implements Pipeline {
     @Override
     public void process(ResultItems resultItems, Task task) {
         Blog blog = resultItems.get("blog");
+        if(blog==null){
+           log.debug("一条数据爬虫失败");
+           return;
+        }
         log.info("**********************blog:{}*********************************", blog.toString());
         try {
             blogService.add(blog);

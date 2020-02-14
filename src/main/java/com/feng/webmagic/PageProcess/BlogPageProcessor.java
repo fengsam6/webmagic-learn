@@ -32,7 +32,7 @@ public class BlogPageProcessor implements PageProcessor {
     public void process(Page page) {
         String pageUrl = page.getUrl().toString();
         //从blog列表页面，提取具体文字url
-        if (page.getUrl().regex(BlogUrlData.listUrl).match()) {
+        if (page.getUrl().regex(BlogUrlData.listUrlReg).match()) {
             Html html = page.getHtml();
             List<Selectable> divListSelectable = html.xpath("div[@class='article-list']/div[@class='article-item-box']").nodes();
             for (Selectable selectable : divListSelectable) {
@@ -41,7 +41,7 @@ public class BlogPageProcessor implements PageProcessor {
             }
         }
 
-        if (page.getUrl().regex(BlogUrlData.detailUrl).match()) {
+        if (page.getUrl().regex(BlogUrlData.detailUrlReg).match()) {
             String url = page.getUrl().toString();
 //        HtmlPage htmlPage = HtmlUnitUtils.getHtmlPage(url);
 //         String content =   HtmlUnitUtils.getHtmlPageResponse(url);
@@ -53,7 +53,7 @@ public class BlogPageProcessor implements PageProcessor {
             String sourceUrl = page.getUrl().toString();
             String readNum = html.xpath("//span[@class='read-count']/text()").toString();
             Blog blog = new Blog(title, author, publishTime, sourceUrl, readNum);
-            page.putField("blog", blog);
+                page.putField("blog", blog);
         }
         System.out.print(pageUrl);
     }

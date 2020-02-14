@@ -2,6 +2,7 @@ package com.feng.webmagic.spiderStart;
 
 import com.feng.servcie.TableOptService;
 import com.feng.util.CpuNumUtils;
+import com.feng.util.DateUtils;
 import com.feng.webmagic.PageProcess.FilmPageProcessor;
 import com.feng.webmagic.PageProcess.IQIYIFilmPageProcessor;
 import com.feng.webmagic.pipeline.FilmDBPipeline;
@@ -33,18 +34,30 @@ public class FilmSpiderStart {
     private int cpuN = CpuNumUtils.getCpuNum();
 
     /**
-     * 每隔2天，清空电影数据重新爬虫
+     * 每隔1天，清空电影数据重新爬虫
      * 这个爬虫获取数据为主
      */
-    @Scheduled(cron = "* * 1 0/2 * ?")
-    public void IQIYIStartScheduled() {
-        //清空表tb_film数据，再重新爬取
+    //每天0点50清空数据
+    @Scheduled(cron = "* 50 0 0/1 * ?")
+    public void cleanTableData() {
+      String curDate = DateUtils.getCurDateStr();
+        //1.清空表tb_film数据
+        log.debug("clean film tableData at {}",curDate);
         tableOptService.cleanTableData("tb_film");
+    }
+
+    @Scheduled(cron = "* * 1 0/1 * ?")
+    public void IQIYIStartScheduled() {
+        String curDate = DateUtils.getCurDateStr();
+        log.debug("IQIYIStartScheduled at {}",curDate);
+        //2.再重新爬取
         IQIYIStart();
     }
 
-    @Scheduled(cron = "* * 5 0/2 * ?")
+    @Scheduled(cron = "* * 3 0/1 * ?")
     public void startScheduled2() {
+        String curDate = DateUtils.getCurDateStr();
+        log.debug("IQIYIStartScheduled2 at {}",curDate);
         start();
     }
 
@@ -65,7 +78,7 @@ public class FilmSpiderStart {
                 .addUrl(allUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
 //                .setScheduler(redisScheduler)
-                .setDownloader(new HttpClientDownloader()).thread(cpuN+1).run();
+                .setDownloader(new HttpClientDownloader()).thread(cpuN).run();
     }
 
     /**

@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class IPUtils {
     /**
@@ -72,6 +74,18 @@ public class IPUtils {
                     break;
                 }
             }
+        }
+        return ip;
+    }
+
+    public static String getSelfMachineIP(){
+        String ip="127.0.0.1";
+        InetAddress address = null;
+        try {
+            address = InetAddress.getLocalHost();
+            ip=address.getHostAddress();
+        } catch (UnknownHostException e) {
+            System.out.print("获取本机ip失败");
         }
         return ip;
     }

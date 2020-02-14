@@ -30,10 +30,9 @@ public class BlogSpiderStart {
     private TableOptService tableOptService;
     private int cpuN = CpuNumUtils.getCpuNum();
     /**
-     * 每隔2天，清空博客数据重新爬虫
+     * 每隔1天，清空博客数据重新爬虫
      */
-    @Scheduled(cron = "* * 5 0/2 * ?")
-    @Async
+    @Scheduled(cron = "* * 9 0/1 * ?")
     public void startScheduled() {
         tableOptService.cleanTableData("tb_blog");
         start();
@@ -41,8 +40,8 @@ public class BlogSpiderStart {
 
     public void start() {
         log.info("启动爬虫。。。。。");
-        Spider.create(blogPageProcessor).addUrl(BlogUrlData.getSpiderUrl())
-                .addPipeline(blogPipeline).thread(cpuN+1)
+        Spider.create(blogPageProcessor).addUrl(BlogUrlData.getSpiderUrls())
+                .addPipeline(blogPipeline).thread(cpuN)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())
                 .run();

@@ -32,7 +32,7 @@ public class Film360SpiderStart {
      * 每隔2天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
      */
-    @Scheduled(cron = "* * 3 0/2 * ?")
+    @Scheduled(cron = "* * 6 0/1 * ?")
     public void startScheduled() {
         film360Start();
     }
@@ -42,12 +42,12 @@ public class Film360SpiderStart {
      * 爬虫360影视
      */
     public void film360Start() {
-        String startUrl[] = Film360UrlUtil.get360DianyingUrls();
+        String[] startUrl = Film360UrlUtil.get360DianyingUrls();
         log.info("启动爬虫。。。。。");
         Spider.create(film360PageProcessor)
                 .addUrl(startUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
-                .setDownloader(new HttpClientDownloader()).thread(cpuN+1).run();
+                .setDownloader(new HttpClientDownloader()).thread(cpuN).run();
     }
 
 }

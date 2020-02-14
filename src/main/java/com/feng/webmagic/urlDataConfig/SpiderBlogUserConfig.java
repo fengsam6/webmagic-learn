@@ -1,4 +1,4 @@
-package com.feng.conf;
+package com.feng.webmagic.urlDataConfig;
 
 /**
  * 定义CSDN爬虫用户列表

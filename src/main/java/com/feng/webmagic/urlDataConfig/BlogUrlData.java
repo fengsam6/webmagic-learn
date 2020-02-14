@@ -1,8 +1,9 @@
 package com.feng.webmagic.urlDataConfig;
 
-import com.feng.conf.SpiderBlogUserConfig;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -10,6 +11,8 @@ import java.util.List;
 public class BlogUrlData {
     public static final String baseUrl = "https://blog.csdn.net/";
     public static final String accountName = "csdnnews";
+    public static final String detailUrlReg = "https://blog\\.csdn\\.net/\\S+/article/details/\\d+";
+    public static final String listUrlReg = "https://blog\\.csdn\\.net/\\S+/article/list/\\d+?";
     public static final String detailUrl = baseUrl + accountName + "/article/details/\\d+";
     public static final String listUrl = baseUrl + accountName + "/article/list/\\d+?";
 
@@ -26,17 +29,28 @@ public class BlogUrlData {
         }
         return spiderUrls;
     }
+
+//todo 根据账号获取爬虫页面
     public static int getPageNum(String accountName) {
         return 10;
     }
-    public static String[] getSpiderUrl(){
+
+    public static String[] getSpiderUrl() {
         return getSpiderUrl(accountName);
     }
-///todo
-    public static List<String> getSpiderUrls() {
+
+    public static List<String> getSpiderUrlList() {
+        List<String> blogUrlList = new ArrayList<>();
         for (String account : accountNames) {
-            String url[] = getSpiderUrl( accountName);
+            String[] url = getSpiderUrl(account);
+            List<String> urlList = Arrays.asList(url);
+            blogUrlList.addAll(urlList);
         }
-        return null;
+        return blogUrlList;
+    }
+
+    public static String[] getSpiderUrls() {
+        List<String> blogUrlList = getSpiderUrlList();
+        return blogUrlList.toArray(new String[blogUrlList.size()]);
     }
 }

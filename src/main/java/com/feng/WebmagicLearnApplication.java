@@ -17,7 +17,7 @@ public class WebmagicLearnApplication {
 
     public static void main(String[] args) throws Exception {
         ApplicationContext applicationContext = SpringApplication.run(WebmagicLearnApplication.class, args);
-        ApplicationContextInfoUtils.printSystemInfo(applicationContext);
+//        ApplicationContextInfoUtils.printSystemInfo(applicationContext);
     }
 
 }

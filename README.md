@@ -1,6 +1,6 @@
 # 一、webmagic-learn
 ## 1.介绍
-1. 使用webmagic、springboot爬取CSDN博客，爬取爱奇艺视频、360影视。每隔2天，清空爬虫数据，重新爬取数据。
+1. 使用webmagic、springboot爬取CSDN博客，爬取爱奇艺视频、360影视。使用定时器，每隔1天，清空爬虫数据，重新爬取数据，使数据尽可能使最新的。
 ## 2.后端技术
 springBoot、mysql、springBoot Data JPA、webmagic、redis
 
