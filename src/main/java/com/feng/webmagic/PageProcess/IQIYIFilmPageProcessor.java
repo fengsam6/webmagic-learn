@@ -13,6 +13,7 @@ import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 使用webmagic框架爬爱奇艺影视
@@ -41,12 +42,13 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
             Html html = page.getHtml();
 
             List<Selectable> liSelectables = html.xpath("//div[@class='wrapper-piclist']/ul/li").nodes();
-            List<Film> filmList = new ArrayList<>();
-            for (Selectable liSelectable : liSelectables) {
-                Film film = resolve(liSelectable);
-                filmList.add(film);
-            }
-
+//            List<Film> filmList = new ArrayList<>();
+//            for (Selectable liSelectable : liSelectables) {
+//                Film film = resolve(liSelectable);
+//                filmList.add(film);
+//            }
+            List<Film> filmList =   liSelectables.stream()
+                    .map(IQIYIFilmPageProcessor::resolve).collect(Collectors.toList());
             page.putField("filmList", filmList);
 
             page.addTargetRequest(page.getUrl().toString());
@@ -54,7 +56,7 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
     }
 
 
-    private Film resolve(Selectable li) {
+    private static Film resolve(Selectable li) {
         System.out.println(li.toString());
         String url = li.xpath("//a[@class='site-piclist_pic_link']/@href").toString();
         url = checkHttpPrefixAndAdd(url);
@@ -87,14 +89,14 @@ public class IQIYIFilmPageProcessor implements PageProcessor {
         return film;
     }
 
-    private String checkHttpPrefixAndAdd(String url) {
+    private static String checkHttpPrefixAndAdd(String url) {
         if (url != null && !url.startsWith("http:")) {
             url = "http:" + url;
         }
         return url;
     }
 
-    private String resolveImg(Selectable li) {
+    private static String resolveImg(Selectable li) {
         //img url 有两种存在形式
         String imgUrl = li.xpath("//img/@src").toString();
         if (imgUrl == null || imgUrl.length() == 0) {

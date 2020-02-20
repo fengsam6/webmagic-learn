@@ -39,9 +39,7 @@ public class BlogPageProcessor implements PageProcessor {
                 String url = selectable.xpath("//h4/a/@href").toString();
                 page.addTargetRequest(url);
             }
-        }
-
-        if (page.getUrl().regex(BlogUrlData.detailUrlReg).match()) {
+        }else  if (page.getUrl().regex(BlogUrlData.detailUrlReg).match()) {
             String url = page.getUrl().toString();
 //        HtmlPage htmlPage = HtmlUnitUtils.getHtmlPage(url);
 //         String content =   HtmlUnitUtils.getHtmlPageResponse(url);

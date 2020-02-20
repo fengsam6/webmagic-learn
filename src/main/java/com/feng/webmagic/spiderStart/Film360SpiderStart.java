@@ -27,7 +27,7 @@ public class Film360SpiderStart {
     private Film360PageProcessor film360PageProcessor;
     @Autowired
     private TableOptService tableOptService;
-    private int cpuN = CpuNumUtils.getCpuNum();
+
     /**
      * 每隔1天，清空电影数据重新爬虫
      * todo 做个web页面定时调度
@@ -42,12 +42,13 @@ public class Film360SpiderStart {
      * 爬虫360影视
      */
     public void film360Start() {
+        int cpuN = CpuNumUtils.getCpuNum();
         String[] startUrl = Film360UrlUtil.get360DianyingUrls();
         log.info("启动爬虫。。。。。");
         Spider.create(film360PageProcessor)
                 .addUrl(startUrl) //设置爬虫url
                 .addPipeline(filmPipeline)
-                .setDownloader(new HttpClientDownloader()).thread(cpuN).run();
+                .setDownloader(new HttpClientDownloader()).thread(cpuN+1).run();
     }
 
 }

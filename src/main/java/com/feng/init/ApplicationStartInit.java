@@ -1,9 +1,7 @@
 package com.feng.init;
 
-import com.feng.util.ApplicationContextInfoUtils;
-import com.feng.util.CpuNumUtils;
-import com.feng.util.IPUtils;
-import com.feng.util.ThreadSleepUtils;
+import com.feng.servcie.TableOptService;
+import com.feng.util.*;
 import com.feng.webmagic.spiderStart.BlogSpiderStart;
 import com.feng.webmagic.spiderStart.Film360SpiderStart;
 import com.feng.webmagic.spiderStart.FilmSpiderStart;
@@ -34,30 +32,51 @@ public class ApplicationStartInit implements CommandLineRunner {
     private Environment environment;
     @Value("${system.isSpiderNow}")
     private boolean isSpiderNow = false;
-
+    @Value("${system.spider.cleanTableOldData}")
+    private boolean cleanTableOldData = false;
+    @Autowired
+private TableOptService tableOptService;
     @Override
     public void run(String... args) {
         ApplicationContextInfoUtils.printSystemInfo(environment);
-        ThreadSleepUtils.sleepNs(6);
-        log.info(">>>>>>>>>>>开始启动爬虫>>>>>>>>>>>>>>>>>>>>>>");
+
         //如果isSpiderNow为false，不启动爬虫
         if (!isSpiderNow) {
             return;
         }
 
-        int n = CpuNumUtils.getCpuNum();
-        ExecutorService executorService = Executors.newFixedThreadPool(n );
+        //清空表中数据
+        if(cleanTableOldData){
+            log.info(">>>>>>>>>>>cleanTableOldData=true,清空爬虫旧数据>>>>>>>>>>>>>>>>>>>>>>");
+            tableOptService.cleanTableData("tb_film");
+            tableOptService.cleanTableData("tb_blog");
+        }else {
+            log.info(">>>>>>>>>>>cleanTableOldData=true,不清空爬虫旧数据>>>>>>>>>>>>>>>>>>>>>>");
+        }
+
+        log.info(">>>>>>>>>>>准备启动爬虫>>>>>>>>>>>>>>>>>>>>>>");
+        ThreadSleepUtils.sleepNs(6);
+
+        ExecutorService executorService = ThreadPoolUtils.creatCpusThreadPool(4);
         executorService.execute(() -> {
             //将电影数据插入数据库中
             filmSpiderStart.IQIYIStart();
-            ThreadSleepUtils.sleepNsAndYield(15);
+        });
+        executorService.execute(() -> {
+            //将电影数据插入数据库中
+            ThreadSleepUtils.sleepNs(100);
             filmSpiderStart.start();
-            ThreadSleepUtils.sleepNsAndYield(25);
+        });
+        executorService.execute(() -> {
+            //将电影数据插入数据库中
+            ThreadSleepUtils.sleepNsAndYield(250);
             film360SpiderStart.film360Start();
-            //爬取csdn博客数据
-            ThreadSleepUtils.sleepNsAndYield(35);
+        });
+        executorService.execute(() -> {
+            ThreadSleepUtils.sleepNsAndYield(350);
             blogSpiderStart.start();
         });
+        executorService.shutdown();
 
     }
 

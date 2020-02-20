@@ -13,6 +13,7 @@ import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -20,7 +21,7 @@ public class Film360PageProcessor implements PageProcessor {
     //    设置爬虫间隔时间
     @Value("${system.spiderIntervalSecond}")
     private int spiderIntervalSecond = 2;
-    private final String baseUrl = "https://www.360kan.com/";
+    private static final String baseUrl = "https://www.360kan.com/";
     private static final String spiderUrl = "https://www.360kan.com/dianying/list*";
     private Site site = Site.me().setRetryTimes(3).setSleepTime(spiderIntervalSecond)
             .setUserAgent(
@@ -32,11 +33,13 @@ public class Film360PageProcessor implements PageProcessor {
         if (page.getUrl().regex(spiderUrl).match()) {
             Html html = page.getHtml();
             List<Selectable> liSelectables = html.$(".s-tab-main .list.g-clear").xpath("//li[@class='item']").nodes();
-            List<Film> filmList = new ArrayList<>();
-            for (Selectable liSelectable : liSelectables) {
-                Film film = resolve(liSelectable);
-                filmList.add(film);
-            }
+//            List<Film> filmList = new ArrayList<>();
+//            for (Selectable liSelectable : liSelectables) {
+//                Film film = resolve(liSelectable);
+//                filmList.add(film);
+//            }
+            List<Film> filmList = liSelectables.stream().map(Film360PageProcessor::resolve)
+                    .collect(Collectors.toList());
             page.putField("filmList", filmList);
         }
     }
@@ -46,7 +49,7 @@ public class Film360PageProcessor implements PageProcessor {
         return site;
     }
 
-    private Film resolve(Selectable li) {
+    private static Film resolve(Selectable li) {
         System.out.println(li.toString());
         String url = baseUrl + li.xpath("//a[@class='js-tongjic']/@href").toString();
         url = checkHttpsPrefixAndAdd(url);
@@ -65,7 +68,7 @@ public class Film360PageProcessor implements PageProcessor {
         return film;
     }
 
-    private String checkHttpsPrefixAndAdd(String url) {
+    private static String checkHttpsPrefixAndAdd(String url) {
         if (url != null && !url.startsWith("https:")) {
             url = "https:" + url;
         }

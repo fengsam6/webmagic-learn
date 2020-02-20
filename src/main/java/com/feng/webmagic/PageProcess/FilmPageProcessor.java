@@ -13,6 +13,7 @@ import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 使用webmagic框架爬爱奇艺影视
@@ -38,11 +39,14 @@ public class FilmPageProcessor implements PageProcessor {
             Html html = page.getHtml();
 
             List<Selectable> liSelectables = html.xpath("//ul[@class='qy-mod-ul']/li").nodes();
-            List<Film> filmList = new ArrayList<>();
-            for (Selectable liSelectable : liSelectables) {
-                Film film = resolve(liSelectable);
-                filmList.add(film);
-            }
+//            List<Film> filmList = new ArrayList<>();
+//            for (Selectable liSelectable : liSelectables) {
+//                Film film = resolve(liSelectable);
+//                filmList.add(film);
+//            }
+            List<Film> filmList = liSelectables.stream().map(FilmPageProcessor::resolve)
+                    .collect(Collectors.toList());
+
 
             page.putField("filmList", filmList);
 
@@ -51,7 +55,7 @@ public class FilmPageProcessor implements PageProcessor {
     }
 
 
-    private Film resolve(Selectable li) {
+    private static Film resolve(Selectable li) {
         System.out.println(li.toString());
         String url = "https:" + li.xpath("//a[@class='qy-mod-link']/@href").toString();
         String title = li.xpath("//a[@class='qy-mod-link']/@title").toString();

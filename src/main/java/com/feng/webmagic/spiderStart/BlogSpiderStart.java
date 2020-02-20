@@ -28,7 +28,7 @@ public class BlogSpiderStart {
     private BlogPageProcessor blogPageProcessor;
     @Autowired
     private TableOptService tableOptService;
-    private int cpuN = CpuNumUtils.getCpuNum();
+
     /**
      * 每隔1天，清空博客数据重新爬虫
      */
@@ -39,9 +39,10 @@ public class BlogSpiderStart {
     }
 
     public void start() {
+        int cpuN = CpuNumUtils.getCpuNum();
         log.info("启动爬虫。。。。。");
         Spider.create(blogPageProcessor).addUrl(BlogUrlData.getSpiderUrls())
-                .addPipeline(blogPipeline).thread(cpuN)
+                .addPipeline(blogPipeline).thread(cpuN+1)
 //                .setScheduler(redisScheduler)
                 .setDownloader(new HttpClientDownloader())
                 .run();
